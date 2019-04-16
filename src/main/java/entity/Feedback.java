@@ -2,6 +2,8 @@ package entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @Entity
 @Table(name = "feedback", catalog = "assignment3", uniqueConstraints = @UniqueConstraint(columnNames = "FEEDBACK_ID"))
@@ -24,7 +26,20 @@ public class Feedback implements Serializable {
     @Column(name = "STATUS", nullable = false)
     private int status;
 
+    HashMap<String, ArrayList<String>> errors = new HashMap<String, ArrayList<String>>();
+
     public Feedback() {
+    }
+
+    public Feedback(Account account, String title, String content) {
+        this.account = account;
+        this.title = title;
+        this.content = content;
+    }
+
+    public Feedback(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 
     public Feedback(Account account, String title, String content, long createdAt, long updatedAt, int status) {
@@ -92,5 +107,56 @@ public class Feedback implements Serializable {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Feedback{" +
+                "feedbackId=" + feedbackId +
+                ", account=" + account +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", status=" + status +
+                ", errors=" + errors +
+                '}';
+    }
+
+    public boolean isValid(){
+        validate();
+        return this.errors.size() == 0;
+    }
+
+    private void validate() {
+        if (this.errors == null) {
+            this.errors = new HashMap<String, ArrayList<String>>();
+        }
+        ArrayList<String> titleError = this.errors.get("title");
+        if (titleError == null) {
+            titleError = new ArrayList<String>();
+        }
+        if (this.content == null || this.content.length() == 0) {
+            titleError.add("Title is required!!!");
+        }
+        if (titleError.size() > 0) {
+            this.errors.put("title",titleError);
+        }
+
+        ArrayList<String> contentError = this.errors.get("content");
+
+        if (contentError == null) {
+            contentError = new ArrayList<String>();
+        }
+        if (this.content == null || this.content.length() == 0) {
+            contentError.add("Content is required!!!");
+        }
+        if (contentError.size() > 0) {
+            this.errors.put("content",contentError);
+        }
+    }
+
+    public HashMap<String, ArrayList<String>> getErrors() {
+        return errors;
     }
 }

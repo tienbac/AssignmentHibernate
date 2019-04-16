@@ -5,6 +5,7 @@ import entity.Account;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import security.Security;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +88,26 @@ public class AccountModel {
         }
         return account;
     }
+    public Account loadAccountByUsername(String username){
+        Session session = HibernateConnection.openSession();
+        Transaction transaction = null;
+        Account account = new Account();
+        try {
+            transaction = session.getTransaction();
+            transaction.begin();
+            String str = "FROM Account WHERE username = '" + username + "'";
+            Query query = session.createQuery(str);
+            account = (Account) query.uniqueResult();
+            transaction.commit();
+        }catch (Exception e){
+            if (transaction!= null){
+                transaction.rollback();
+            }
+        }finally {
+            session.close();
+        }
+        return account;
+    }
 
     public List<Account> loadAccounts(){
         Session session = HibernateConnection.openSession();
@@ -129,5 +150,15 @@ public class AccountModel {
             session.close();
         }
         return result;
+    }
+
+    public Account check(String username, String password){
+        Security security = new Security();
+        Account account = loadAccountByUsername(username);
+        String newPassword = security.encriptMD5(password);
+        if (newPassword.equals(account.getPassword())){
+            return account;
+        }
+        return null;
     }
 }

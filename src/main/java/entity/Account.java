@@ -2,10 +2,7 @@ package entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "account", catalog = "assignment3")
@@ -42,11 +39,27 @@ public class Account implements Serializable {
     @Column(name = "UPDATED_AT", nullable = true)
     private long updatedAt;
 
+    HashMap<String, ArrayList<String>> errors = new HashMap<String, ArrayList<String>>();
 
     public Account() {
+        this.username = "";
     }
 
+    public Account(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
+    public Account(String username, String password, UserInformation userInformation, Collection<Role> roles, Collection<Feedback> feedbacks, int status, long createdAt, long updatedAt) {
+        this.username = username;
+        this.password = password;
+        this.userInformation = userInformation;
+        this.roles = roles;
+        this.feedbacks = feedbacks;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
     public int getAccountId() {
         return accountId;
@@ -137,5 +150,76 @@ public class Account implements Serializable {
 
     public void setUpdatedAt(long updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accountId=" + accountId +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", userInformation=" + userInformation +
+                ", roles=" + roles +
+                ", feedbacks=" + feedbacks +
+                ", status=" + status +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", errors=" + errors +
+                '}';
+    }
+
+    public boolean isValid(){
+        validate();
+        return this.errors.size() == 0;
+    }
+
+    private static boolean isNumber(String string) {
+        return string.matches(".*[0-9].*");
+    }
+    private static boolean isString(String string) {
+        return string.matches(".*[a-zA-Z].*");
+    }
+
+    private void validate() {
+        if (this.errors == null) {
+            this.errors = new HashMap<String, ArrayList<String>>();
+        }
+        ArrayList<String> userNameError = this.errors.get("username");
+        ArrayList<String> passwordError = this.errors.get("password");
+
+        if (userNameError == null) {
+            userNameError = new ArrayList<String>();
+        }
+        if (this.username == null || this.username.length() == 0) {
+            userNameError.add("Username is required!!!");
+        }
+        if (this.username.length() < 2 || this.username.length() > 30) {
+            userNameError.add("Username must be between 2 and 30 character");
+        }
+        if (userNameError.size() > 0) {
+            this.errors.put("username", userNameError);
+        }
+
+        if (passwordError == null) {
+            passwordError = new ArrayList<String>();
+        }
+        if (this.password == null || this.password.length() == 0) {
+            passwordError.add("Password is required!!!");
+
+        }
+        if (this.password.length() < 2 || this.password.length() > 30) {
+            passwordError.add("Password must be between 6 and 8 character");
+        }
+        if (!isNumber(this.password) && !isString(this.password)) {
+            passwordError.add("Password must have character and number");
+        }
+
+        if (passwordError.size() > 0) {
+            this.errors.put("password", passwordError);
+        }
+    }
+
+    public HashMap<String, ArrayList<String>> getErrors() {
+        return this.errors;
     }
 }
