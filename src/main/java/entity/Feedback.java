@@ -5,14 +5,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-@Entity
-@Table(name = "feedback", catalog = "assignment3", uniqueConstraints = @UniqueConstraint(columnNames = "FEEDBACK_ID"))
+@Entity(name = "Fedbacks")
+@Table(name = "feedback", catalog = "assignment2", uniqueConstraints = @UniqueConstraint(columnNames = "FEEDBACK_ID"))
 public class Feedback implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "FEEDBACK_ID", unique = true, nullable = false)
     private int feedbackId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ACCOUNT_ID", nullable = false)
     private Account account;
 
     @Column(name = "TITLE", nullable = false, length = 100)
@@ -59,8 +61,7 @@ public class Feedback implements Serializable {
         this.feedbackId = feedbackId;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ACCOUNT_ID", nullable = false)
+
     public Account getAccount() {
         return account;
     }

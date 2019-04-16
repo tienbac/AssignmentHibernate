@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@Entity(name = "Role")
 @Table(name = "role", catalog = "assignment2", uniqueConstraints = {@UniqueConstraint(columnNames = "ROLE_ID"), @UniqueConstraint(columnNames = "ROLE_NAME")})
 public class Role implements Serializable {
     @Id

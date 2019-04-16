@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 
-@Entity
-@Table(name = "account", catalog = "assignment3")
+@Entity(name = "Account")
+@Table(name = "account", catalog = "assignment2")
 public class Account implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +24,10 @@ public class Account implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "accounts")
     private Collection<Role> roles = new ArrayList<Role>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", orphanRemoval = true)
     private Collection<Feedback> feedbacks = new ArrayList<Feedback>();
 
     //private Set<Role> roles = new HashSet<Role>(0);
-
-
     //private Set<Feedback> feedbacks = new HashSet<Feedback>(0);
 
     @Column(name = "STATUS", nullable = false)

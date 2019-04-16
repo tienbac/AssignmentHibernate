@@ -5,7 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
+@Entity(name = "UserInformation")
 @Table(name = "userInformation", catalog = "assignment2")
 public class UserInformation implements Serializable {
 //    @GenericGenerator(name = "generator", strategy = "foreign", parameters = @org.hibernate.annotations.Parameter(name = "property", value = "account"))
