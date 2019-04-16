@@ -9,6 +9,10 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
+    String loginFail = (String) request.getAttribute("loginFail");
+    if (loginFail == null){
+        loginFail = "";
+    }
     HashMap<String, ArrayList<String>> errors = (HashMap<String, ArrayList<String>>) request.getAttribute("errors");
     if (errors == null) {
         errors = new HashMap<>();
@@ -80,6 +84,9 @@
                 </div>
 
                 <div class="container-login100-form-btn">
+                    <%if (loginFail != ""){%>
+                    <h3 class="text-danger"><%= loginFail%></h3>
+                    <%} %>
                     <button class="login100-form-btn">
                         Login
                     </button>

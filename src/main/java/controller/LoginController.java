@@ -40,7 +40,7 @@ public class LoginController extends HttpServlet {
                 HttpSession session = req.getSession();
                 session.setAttribute("LogUsername", account.getUsername());
                 session.setAttribute("LogUserId", account.getAccountId());
-                
+
             }
         }
     }

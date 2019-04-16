@@ -16,7 +16,7 @@ public class Account implements Serializable {
     @Column(name = "PASSWORD", nullable = false, length = 255)
     private String password;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL, optional = false)
     private UserInformation userInformation;
 
 //    @ManyToMany(cascade = CascadeType.ALL)
@@ -38,6 +38,7 @@ public class Account implements Serializable {
     private long createdAt;
     @Column(name = "UPDATED_AT", nullable = true)
     private long updatedAt;
+
 
     HashMap<String, ArrayList<String>> errors = new HashMap<String, ArrayList<String>>();
 

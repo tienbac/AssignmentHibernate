@@ -8,16 +8,17 @@ import java.io.Serializable;
 @Entity
 @Table(name = "userInformation", catalog = "assignment2")
 public class UserInformation implements Serializable {
-    @GenericGenerator(name = "generator", strategy = "foreign", parameters = @org.hibernate.annotations.Parameter(name = "property", value = "account"))
-    @Id
-    @GeneratedValue(generator = "generator")
-    @Column(name = "ACCOUNT_ID", unique = true, nullable = false)
-    private int accountId;
+//    @GenericGenerator(name = "generator", strategy = "foreign", parameters = @org.hibernate.annotations.Parameter(name = "property", value = "account"))
+//    @Id
+//    @GeneratedValue(generator = "generator")
+//    @Column(name = "ACCOUNT_ID", unique = true, nullable = false)
+//    private int accountId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
+    @JoinColumn(name = "ACCOUNT_ID")
     private Account account;
 
+    @Id
     @Column(name = "EMAIL", unique = true)
     private String email;
 
@@ -45,8 +46,8 @@ public class UserInformation implements Serializable {
     public UserInformation() {
     }
 
-    public UserInformation(int accountId, Account account, String email, String fullName, int gender, long birthday, String phone, String salt, String address, long updatedAt) {
-        this.accountId = accountId;
+    public UserInformation( Account account, String email, String fullName, int gender, long birthday, String phone, String salt, String address, long updatedAt) {
+        //this.accountId = accountId;
         this.account = account;
         this.email = email;
         this.fullName = fullName;
@@ -58,13 +59,13 @@ public class UserInformation implements Serializable {
         UpdatedAt = updatedAt;
     }
 
-    public int getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
-    }
+//    public int getAccountId() {
+//        return accountId;
+//    }
+//
+//    public void setAccountId(int accountId) {
+//        this.accountId = accountId;
+//    }
 
     public Account getAccount() {
         return account;
